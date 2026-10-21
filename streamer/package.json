@@ -1,0 +1,8 @@
+{
+  "name": "spectatorcamera-tiktok-streamer",
+  "version": "1.0.0",
+  "description": "Loops a video/image/web preview to TikTok LIVE via FFmpeg with text, image and video overlays",
+  "main": "stream.js",
+  "scripts": { "start": "node stream.js" },
+  "engines": { "node": ">=18" }
+}
