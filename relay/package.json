@@ -1,0 +1,8 @@
+{
+  "name": "spectatorcamera-relay",
+  "version": "1.0.0",
+  "description": "Receives live data from the SpectatorCamera plugin and serves the watch page",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
