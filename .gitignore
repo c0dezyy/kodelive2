@@ -1,0 +1,4 @@
+node_modules/
+plugin/target/
+auth/
+.env
