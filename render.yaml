@@ -1,0 +1,15 @@
+# One-click deploy of the relay (the public watch link) on Render's free plan.
+# Render dashboard: New > Blueprint > pick this GitHub repo.
+services:
+  - type: web
+    name: spectatorcamera-relay
+    runtime: node
+    plan: free
+    rootDir: relay
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PUSH_KEY
+        sync: false
+      - key: VIEW_TOKEN
+        sync: false
