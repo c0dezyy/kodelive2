@@ -1,0 +1,9 @@
+{
+  "name": "spectatorcamera-xbox-bot",
+  "version": "1.1.0",
+  "description": "Bedrock bot that logs in with a real Xbox/Microsoft account and acts as the SpectatorCamera body",
+  "main": "bot.js",
+  "scripts": { "start": "node bot.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "bedrock-protocol": "^3.0.0" }
+}
