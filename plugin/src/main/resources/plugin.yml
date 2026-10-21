@@ -1,0 +1,20 @@
+name: SpectatorCamera
+version: '${project.version}'
+main: com.codezyy.spectatorcamera.SpectatorCameraPlugin
+api-version: '1.21'
+description: Virtual spectator camera with auto-follow, cinematic shots, patrol and a browser live preview.
+commands:
+  spectatorcamera:
+    description: Control the spectator camera
+    usage: /<command> <join|leave|link|follow|mode|next|addpoint|clearpoints|account|status|reload>
+    aliases: [cam, scam]
+permissions:
+  spectatorcamera.use:
+    description: Join/leave the camera view
+    default: true
+  spectatorcamera.link:
+    description: Get the browser watch link
+    default: true
+  spectatorcamera.admin:
+    description: Control camera mode, targets, patrol points
+    default: op

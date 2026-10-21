@@ -1,0 +1,74 @@
+# AUTO = cinematic when players are online, patrol when the server is empty
+default-mode: AUTO
+
+# Camera smoothing (0.05 = floaty, 0.3 = snappy)
+smoothing: 0.12
+
+# Teleport viewers every N ticks. Raise to 3-4 if Bedrock (Geyser) viewers stutter.
+teleport-interval-ticks: 2
+
+# How long to stay on one player before switching (seconds)
+switch-seconds: 25
+
+follow:
+  distance: 5.0
+  height: 2.0
+
+orbit:
+  radius: 8.0
+  height: 3.0
+  speed-degrees: 1.5
+
+cinematic:
+  shot-seconds: 8
+
+patrol:
+  speed: 0.6            # blocks per tick
+  fallback-radius: 30   # used when no points are set: orbit world spawn
+  # Added with /cam addpoint  (format: world;x;y;z)
+  points: []
+
+web:
+  enabled: true
+  host: 0.0.0.0
+  port: 8765
+  # Optional: the address people should use in /cam link (domain, tunnel or Railway URL), no trailing slash
+  public-url: ""
+  # Set a token! Open http://SERVER_IP:8765/?token=YOURTOKEN
+  token: change-me
+
+# Accounts that ARE the camera. When one of these logs in (e.g. your Xbox bot),
+# it is automatically put in spectator mode and driven by the plugin, no commands needed.
+# Bedrock names: write them WITHOUT the Floodgate prefix (".") - it is ignored.
+camera-accounts: []
+
+# Hide camera accounts from other players (tab list + world)
+hide-camera-accounts: true
+
+# Master switch: automatically put camera-accounts into camera mode when they join.
+# Set to false to disable the auto-enroll behaviour.
+auto-enroll: true
+
+# ----- Overlays: shown in the browser preview and in any stream that captures it -----
+overlay:
+  enabled: true
+  text: "Now watching: {target}"   # placeholders: {target} {mode} {players}
+  text-position: bottom            # top | bottom
+  # image / video: a file name inside plugins/SpectatorCamera/overlay/  OR a full https:// URL
+  image: ""
+  image-position: top-left         # top-left | top-right | bottom-left | bottom-right
+  image-width: 160
+  video: ""
+  video-position: top-right
+  video-width: 220
+
+# ----- Relay: NO open port needed (best for shared hosts like PixelForge) -----
+# The plugin pushes live data OUT to your relay (deploy /relay on Railway). The relay serves the watch page.
+# 1) Deploy the relay, 2) paste its URL here, 3) use the same key as the relay's PUSH_KEY variable.
+relay:
+  enabled: false
+  url: "https://YOUR-RELAY.up.railway.app"
+  key: "change-me-push-key"        # must equal PUSH_KEY on the relay (8+ characters)
+  view-token: "change-me-view"     # people open  URL/?token=view-token   ("" = anyone with the URL)
+  interval-ms: 500
+  # With the relay, local overlay files are not available: use https image/video URLs in overlay.image / overlay.video
