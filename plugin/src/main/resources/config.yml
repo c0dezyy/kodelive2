@@ -72,3 +72,11 @@ relay:
   view-token: "change-me-view"     # people open  URL/?token=view-token   ("" = anyone with the URL)
   interval-ms: 500
   # With the relay, local overlay files are not available: use https image/video URLs in overlay.image / overlay.video
+
+# ----- Ignore list: the camera never follows these players -----
+# Names are case-insensitive and the Floodgate "." prefix is ignored. Manage in game with:
+#   /cam ignore add <name>   /cam ignore remove <name>   /cam ignore list
+ignore-players:
+  - codezyy6143
+# Also hide ignored players from the watch page map and the {players} count
+ignore-hide-on-map: true

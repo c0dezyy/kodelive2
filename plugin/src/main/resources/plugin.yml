@@ -6,7 +6,7 @@ description: Virtual spectator camera with auto-follow, cinematic shots, patrol 
 commands:
   spectatorcamera:
     description: Control the spectator camera
-    usage: /<command> <join|leave|link|follow|mode|next|addpoint|clearpoints|account|status|reload>
+    usage: /<command> <join|leave|link|follow|mode|next|addpoint|clearpoints|account|ignore|status|reload>
     aliases: [cam, scam]
 permissions:
   spectatorcamera.use:
