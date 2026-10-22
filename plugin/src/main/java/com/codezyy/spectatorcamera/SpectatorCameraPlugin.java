@@ -82,7 +82,7 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
 
     // ---------- camera accounts (bots) ----------
 
-    private static String norm(String name) {
+    public static String norm(String name) {
         String n = name.toLowerCase();
         while (n.startsWith(".")) n = n.substring(1); // Floodgate prefix
         return n.replace(' ', '_');
@@ -91,6 +91,14 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
     public boolean isCameraAccount(Player p) {
         String me = norm(p.getName());
         for (String s : getConfig().getStringList("camera-accounts")) {
+            if (norm(s).equals(me)) return true;
+        }
+        return false;
+    }
+
+    public boolean isIgnored(Player p) {
+        String me = norm(p.getName());
+        for (String s : getConfig().getStringList("ignore-players")) {
             if (norm(s).equals(me)) return true;
         }
         return false;
@@ -166,6 +174,7 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
                 if (args.length < 2) return msg(sender, "Usage: /cam follow <player>");
                 Player t = Bukkit.getPlayerExact(args[1]);
                 if (t == null) return msg(sender, "Player not online.");
+                if (isIgnored(t)) return msg(sender, t.getName() + " is on the ignore list. Use /cam ignore remove " + t.getName() + " first.");
                 camera.setManualTarget(t);
                 if (camera.getMode() == Camera.Mode.PATROL) camera.setMode(Camera.Mode.AUTO);
                 return msg(sender, "Following " + t.getName() + ".");
@@ -206,6 +215,9 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
             case "account" -> {
                 return accountCmd(sender, args);
             }
+            case "ignore" -> {
+                return ignoreCmd(sender, args);
+            }
             case "reload" -> {
                 reloadConfig();
                 startWeb();
@@ -214,7 +226,32 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
                 return msg(sender, "Config reloaded.");
             }
             default -> {
-                return msg(sender, "/cam <join|leave|follow|mode|next|addpoint|clearpoints|account|status|reload>");
+                return msg(sender, "/cam <join|leave|link|follow|mode|next|addpoint|clearpoints|account|ignore|status|reload>");
+            }
+        }
+    }
+
+    private boolean ignoreCmd(CommandSender sender, String[] args) {
+        String action = args.length > 1 ? args[1].toLowerCase() : "list";
+        List<String> list = new ArrayList<>(getConfig().getStringList("ignore-players"));
+        switch (action) {
+            case "add" -> {
+                if (args.length < 3) return msg(sender, "Usage: /cam ignore add <name>");
+                if (list.stream().noneMatch(s -> norm(s).equals(norm(args[2])))) list.add(args[2]);
+                getConfig().set("ignore-players", list);
+                saveConfig();
+                camera.nextTarget();
+                return msg(sender, "Ignored players (never followed): " + list);
+            }
+            case "remove" -> {
+                if (args.length < 3) return msg(sender, "Usage: /cam ignore remove <name>");
+                list.removeIf(s -> norm(s).equals(norm(args[2])));
+                getConfig().set("ignore-players", list);
+                saveConfig();
+                return msg(sender, "Ignored players (never followed): " + list);
+            }
+            default -> {
+                return msg(sender, "Ignored players (never followed): " + list);
             }
         }
     }
@@ -289,12 +326,12 @@ public class SpectatorCameraPlugin extends JavaPlugin implements Listener, TabEx
         List<String> out = new ArrayList<>();
         if (args.length == 1) {
             for (String s : List.of("join", "leave", "status", "follow", "mode", "next", "addpoint",
-                    "clearpoints", "account", "link", "reload"))
+                    "clearpoints", "account", "ignore", "link", "reload"))
                 if (s.startsWith(args[0].toLowerCase())) out.add(s);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("mode")) {
             for (Camera.Mode m : Camera.Mode.values())
                 if (m.name().toLowerCase().startsWith(args[1].toLowerCase())) out.add(m.name().toLowerCase());
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("account")) {
+        } else if (args.length == 2 && (args[0].equalsIgnoreCase("account") || args[0].equalsIgnoreCase("ignore"))) {
             for (String s : List.of("add", "remove", "list"))
                 if (s.startsWith(args[1].toLowerCase())) out.add(s);
         } else if (args.length == 2 && List.of("follow", "join", "leave").contains(args[0].toLowerCase())) {
