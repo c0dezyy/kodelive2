@@ -126,7 +126,7 @@ public class Camera {
     private List<Player> candidates() {
         List<Player> list = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (viewers.contains(p.getUniqueId()) || plugin.isCameraAccount(p)) continue;
+            if (viewers.contains(p.getUniqueId()) || plugin.isCameraAccount(p) || plugin.isIgnored(p)) continue;
             if (p.getGameMode() == GameMode.SPECTATOR) continue;
             list.add(p);
         }
@@ -334,7 +334,8 @@ public class Camera {
         sb.append("\"players\":[");
         boolean first = true;
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (viewers.contains(p.getUniqueId()) || plugin.isCameraAccount(p)) continue;
+            if (viewers.contains(p.getUniqueId()) || plugin.isCameraAccount(p)
+                    || (plugin.isIgnored(p) && plugin.getConfig().getBoolean("ignore-hide-on-map", true))) continue;
             Location l = p.getLocation();
             if (!first) sb.append(",");
             first = false;
